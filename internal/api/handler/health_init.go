@@ -3,7 +3,7 @@ package handler
 import (
 	"reflect"
 
-	"github.com/JerkyTreats/template-goapi/internal/api/types"
+	"github.com/JerkyTreats/llm/internal/api/types"
 )
 
 func init() {
