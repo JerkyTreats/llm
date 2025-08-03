@@ -9,9 +9,9 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/JerkyTreats/template-goapi/internal/api/handler"
-	"github.com/JerkyTreats/template-goapi/internal/config"
-	"github.com/JerkyTreats/template-goapi/internal/logging"
+	"github.com/JerkyTreats/llm/internal/api/handler"
+	"github.com/JerkyTreats/llm/internal/config"
+	"github.com/JerkyTreats/llm/internal/logging"
 )
 
 func main() {

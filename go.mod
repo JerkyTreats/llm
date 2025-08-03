@@ -1,4 +1,4 @@
-module {{MODULE_NAME}}
+module github.com/JerkyTreats/llm
 
 go 1.24.3
 

@@ -1,4 +1,4 @@
-# {{MODULE_NAME}}
+# github.com/JerkyTreats/llm
 
 Run scripts/template-init.sh to initialize the project.
 

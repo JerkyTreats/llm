@@ -3,8 +3,8 @@ package handler
 import (
 	"net/http"
 
-	"github.com/JerkyTreats/template-goapi/internal/api/types"
-	"github.com/JerkyTreats/template-goapi/internal/logging"
+	"github.com/JerkyTreats/llm/internal/api/types"
+	"github.com/JerkyTreats/llm/internal/logging"
 )
 
 // HandlerRegistry manages all HTTP handlers for the application
@@ -76,7 +76,7 @@ func (hr *HandlerRegistry) updateRouteHandlers() {
 			}
 		}
 	}
-	
+
 	// Update the global registry with the handler references
 	types.UpdateRouteRegistry(routes)
 }

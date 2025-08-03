@@ -1,4 +1,4 @@
-// Package config provides centralized, extensible configuration loading for {{PROJECT_NAME}} using spf13/viper.
+// Package config provides centralized, extensible configuration loading for LLM using spf13/viper.
 // All config access must go through this package.
 package config
 
@@ -34,7 +34,7 @@ func loadConfig() (*viper.Viper, error) {
 	v := viper.New()
 	v.SetConfigType("json")
 	v.SetConfigName("config")
-	v.AddConfigPath(os.ExpandEnv("$HOME/{{CONFIG_DIR}}"))
+	v.AddConfigPath(os.ExpandEnv("$HOME/.llm"))
 	if configPath != "" {
 		v.SetConfigFile(configPath)
 	}

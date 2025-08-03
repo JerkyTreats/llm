@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"sync"
 
-	"github.com/JerkyTreats/template-goapi/internal/logging"
+	"github.com/JerkyTreats/llm/internal/logging"
 )
 
 // RouteInfo contains metadata for API route registration and documentation generation
@@ -31,7 +31,7 @@ var (
 func RegisterRoute(route RouteInfo) {
 	registryMutex.Lock()
 	defer registryMutex.Unlock()
-	
+
 	routeRegistry = append(routeRegistry, route)
 	logging.Debug("Registered route: %s %s from module %s", route.Method, route.Path, route.Module)
 }
@@ -41,7 +41,7 @@ func RegisterRoute(route RouteInfo) {
 func GetRegisteredRoutes() []RouteInfo {
 	registryMutex.RLock()
 	defer registryMutex.RUnlock()
-	
+
 	// Return a copy to prevent external modification
 	routes := make([]RouteInfo, len(routeRegistry))
 	copy(routes, routeRegistry)
@@ -52,7 +52,7 @@ func GetRegisteredRoutes() []RouteInfo {
 func UpdateRouteRegistry(routes []RouteInfo) {
 	registryMutex.Lock()
 	defer registryMutex.Unlock()
-	
+
 	routeRegistry = routes
 }
 
@@ -60,6 +60,6 @@ func UpdateRouteRegistry(routes []RouteInfo) {
 func ClearRegistry() {
 	registryMutex.Lock()
 	defer registryMutex.Unlock()
-	
+
 	routeRegistry = nil
 }

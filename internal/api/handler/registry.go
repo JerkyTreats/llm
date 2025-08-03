@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"github.com/JerkyTreats/template-goapi/internal/api/types"
+	"github.com/JerkyTreats/llm/internal/api/types"
 )
 
 // RegisterRoute is a convenience wrapper around types.RegisterRoute
