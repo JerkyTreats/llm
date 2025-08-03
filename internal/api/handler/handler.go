@@ -4,12 +4,14 @@ import (
 	"net/http"
 
 	"github.com/JerkyTreats/llm/internal/api/types"
+	"github.com/JerkyTreats/llm/internal/docs"
 	"github.com/JerkyTreats/llm/internal/logging"
 )
 
 // HandlerRegistry manages all HTTP handlers for the application
 type HandlerRegistry struct {
 	healthHandler *HealthHandler
+	docsHandler   *docs.DocsHandler
 	mux           *http.ServeMux
 }
 
@@ -23,8 +25,15 @@ func NewHandlerRegistry() (*HandlerRegistry, error) {
 		return nil, err
 	}
 
+	// Initialize docs handler
+	docsHandler, err := docs.NewDocsHandler()
+	if err != nil {
+		return nil, err
+	}
+
 	registry := &HandlerRegistry{
 		healthHandler: healthHandler,
+		docsHandler:   docsHandler,
 		mux:           http.NewServeMux(),
 	}
 
@@ -73,6 +82,18 @@ func (hr *HandlerRegistry) updateRouteHandlers() {
 		case "/health":
 			if hr.healthHandler != nil {
 				routes[i].Handler = hr.healthHandler.ServeHTTP
+			}
+		case "/swagger":
+			if hr.docsHandler != nil {
+				routes[i].Handler = hr.docsHandler.ServeSwaggerUI
+			}
+		case "/docs/openapi.yaml":
+			if hr.docsHandler != nil {
+				routes[i].Handler = hr.docsHandler.ServeOpenAPISpec
+			}
+		case "/docs":
+			if hr.docsHandler != nil {
+				routes[i].Handler = hr.docsHandler.ServeDocs
 			}
 		}
 	}

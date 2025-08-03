@@ -1,0 +1,125 @@
+# Auto-generated OpenAPI specification
+# DO NOT EDIT MANUALLY - Changes will be overwritten
+
+openapi: 3.0.3
+info:
+    title: LLM API
+    description: Auto-generated API documentation for LLM service with zero-maintenance updates
+    version: 1.0.0
+servers:
+    - url: http://localhost:8080
+      description: Development server
+paths:
+    /docs:
+        get:
+            tags:
+                - docs
+            summary: Documentation static files
+            operationId: getdocs
+            responses:
+                "200":
+                    description: Success
+                "400":
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+                "500":
+                    description: Internal Server Error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+    /docs/openapi.yaml:
+        get:
+            tags:
+                - docs
+            summary: OpenAPI specification file
+            operationId: getdocsOpenapi.Yaml
+            responses:
+                "200":
+                    description: Success
+                "400":
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+                "500":
+                    description: Internal Server Error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+    /health:
+        get:
+            tags:
+                - health
+            summary: Health check endpoint returning service status
+            operationId: gethealth
+            responses:
+                "200":
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/HealthResponse'
+                "400":
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+                "500":
+                    description: Internal Server Error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+    /swagger:
+        get:
+            tags:
+                - docs
+            summary: Swagger UI for API documentation
+            operationId: getswagger
+            responses:
+                "200":
+                    description: Success
+                "400":
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+                "500":
+                    description: Internal Server Error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+components:
+    schemas:
+        ErrorResponse:
+            properties:
+                error:
+                    description: Indicates this is an error response
+                    type: boolean
+                message:
+                    description: Human-readable error message
+                    type: string
+                status:
+                    description: HTTP status code
+                    type: integer
+            required:
+                - error
+                - message
+                - status
+            type: object
+        HealthResponse:
+            properties:
+                status:
+                    type: string
+            required:
+                - status
+            type: object

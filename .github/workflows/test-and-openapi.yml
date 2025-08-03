@@ -1,0 +1,108 @@
+name: Test and Generate OpenAPI
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GHA_PAM }}
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.24.3'
+
+    - name: Cache Go modules
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cache/go-build
+          ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+
+    - name: Download dependencies
+      run: go mod download
+
+    - name: Run unit tests
+      run: go test -v ./...
+
+    - name: Run tests with race detection
+      run: go test -race -short ./...
+
+    - name: Run tests with coverage
+      run: |
+        go test -coverprofile=coverage.out ./...
+        go tool cover -func=coverage.out
+
+    - name: Build main server
+      run: go build -o bin/server cmd/server/main.go
+
+    - name: Build OpenAPI generator
+      run: go build -o bin/generate-openapi cmd/generate-openapi/main.go
+
+    - name: Generate OpenAPI Documentation
+      run: go run cmd/generate-openapi/main.go
+
+    - name: Validate Generated OpenAPI Spec
+      run: |
+        if [ ! -f "docs/api/openapi.yaml" ]; then
+          echo "❌ OpenAPI spec file not generated"
+          exit 1
+        fi
+        
+        # Check if the file contains expected OpenAPI structure
+        if ! grep -q "openapi: 3.0.3" docs/api/openapi.yaml; then
+          echo "❌ OpenAPI spec does not contain valid OpenAPI version"
+          exit 1
+        fi
+        
+        if ! grep -q "title: LLM API" docs/api/openapi.yaml; then
+          echo "❌ OpenAPI spec does not contain expected API title"
+          exit 1
+        fi
+        
+        echo "✅ OpenAPI specification validated successfully"
+
+    - name: Commit Updated OpenAPI Spec
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "OpenAPI Generator"
+        if ! git diff --quiet docs/api/openapi.yaml; then
+          git add docs/api/openapi.yaml
+          git commit -m "Auto-update OpenAPI spec [skip ci]"
+          git push
+          echo "✅ OpenAPI specification updated and committed"
+        else
+          echo "✅ OpenAPI specification is up to date"
+        fi
+
+    - name: Upload OpenAPI Spec as Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: openapi-spec
+        path: docs/api/openapi.yaml
+        retention-days: 30
+
+    - name: Test summary
+      run: |
+        echo "✅ All unit tests passed"
+        echo "✅ Race condition tests passed"
+        echo "✅ Coverage analysis completed"
+        echo "✅ Server binary built successfully"
+        echo "✅ OpenAPI generator binary built successfully"
+        echo "✅ OpenAPI documentation generated and validated"
+        echo "✅ Build and test pipeline completed successfully"

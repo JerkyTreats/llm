@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	logging.Info("Starting TEMPLATE_GOAPI API server")
+	logging.Info("Starting LLM API server")
 
 	// Initialize handler registry
 	handlerRegistry, err := handler.NewHandlerRegistry()
@@ -41,7 +41,7 @@ func main() {
 
 	// Start server in a goroutine
 	go func() {
-		logging.Info("TEMPLATE_GOAPI API server starting on port %s", port)
+		logging.Info("LLM API server starting on port %s", port)
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			logging.Error("Server failed to start: %v", err)
 			os.Exit(1)
@@ -53,7 +53,7 @@ func main() {
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 
-	logging.Info("Shutting down TEMPLATE_GOAPI API server...")
+	logging.Info("Shutting down LLM API server...")
 
 	// Create a deadline for shutdown
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
@@ -65,5 +65,5 @@ func main() {
 		os.Exit(1)
 	}
 
-	logging.Info("TEMPLATE_GOAPI API server stopped")
+	logging.Info("LLM API server stopped")
 }
